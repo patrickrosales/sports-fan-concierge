@@ -32,7 +32,10 @@ coordinator = Agent(
         "asks about the schedule, you don't need seating or local tips. "
         "Then compose everything into one warm, concrete game-night plan. "
         "Base the plan strictly on what the specialists return; never invent games, "
-        "prices, or venues."
+        "prices, or venues. If `find_games` returns no matching games (e.g. the team "
+        "isn't one we track, or nothing is scheduled), do NOT call the other specialists "
+        "or invent a game -- set `game` to null and use `summary` to explain what happened "
+        "and which teams/data you do have."
     ),
 )
 

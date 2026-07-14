@@ -15,6 +15,17 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 export function PlanCard({ plan }: Props) {
   const { game, seating, dining, getting_there, summary } = plan
 
+  if (!game) {
+    return (
+      <div className="w-full max-w-2xl mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+        <p className="text-xs font-medium uppercase tracking-wide text-neutral-400">
+          No matching game
+        </p>
+        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{summary}</p>
+      </div>
+    )
+  }
+
   return (
     <div className="w-full max-w-2xl mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
       <div className="border-b border-neutral-100 dark:border-neutral-800 pb-4">
