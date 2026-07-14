@@ -1,0 +1,92 @@
+[
+  {
+    "id": "g1",
+    "team": "Blue Jays",
+    "league": "MLB",
+    "opponent": "New York Yankees",
+    "date": "2026-07-18",
+    "time": "19:07",
+    "venue": "Downtown Dome",
+    "note": "Weekend series opener; expect a big crowd."
+  },
+  {
+    "id": "g2",
+    "team": "Blue Jays",
+    "league": "MLB",
+    "opponent": "Boston Red Sox",
+    "date": "2026-07-25",
+    "time": "15:07",
+    "venue": "Downtown Dome",
+    "note": "Afternoon game, roof likely open in summer."
+  },
+  {
+    "id": "g3",
+    "team": "Toronto FC",
+    "league": "MLS",
+    "opponent": "CF Montreal",
+    "date": "2026-07-19",
+    "time": "19:30",
+    "venue": "Waterfront Pitch",
+    "note": "401 Derby rivalry match."
+  },
+  {
+    "id": "g4",
+    "team": "Toronto FC",
+    "league": "MLS",
+    "opponent": "New York City FC",
+    "date": "2026-08-01",
+    "time": "19:30",
+    "venue": "Waterfront Pitch",
+    "note": "Saturday night under the lights."
+  },
+  {
+    "id": "g5",
+    "team": "Argonauts",
+    "league": "CFL",
+    "opponent": "Hamilton Tiger-Cats",
+    "date": "2026-07-24",
+    "time": "19:00",
+    "venue": "Waterfront Pitch",
+    "note": "Labour Day preview; classic rivalry."
+  },
+  {
+    "id": "g6",
+    "team": "Raptors",
+    "league": "NBA (preseason)",
+    "opponent": "Boston Celtics",
+    "date": "2026-10-08",
+    "time": "19:30",
+    "venue": "Center Court Arena",
+    "note": "Preseason opener; good for first-timers."
+  },
+  {
+    "id": "g7",
+    "team": "Raptors",
+    "league": "NBA",
+    "opponent": "Milwaukee Bucks",
+    "date": "2026-10-28",
+    "time": "19:30",
+    "venue": "Center Court Arena",
+    "note": "Regular-season home opener."
+  },
+  {
+    "id": "g8",
+    "team": "Maple Leafs",
+    "league": "NHL (preseason)",
+    "opponent": "Ottawa Senators",
+    "date": "2026-09-26",
+    "time": "19:00",
+    "venue": "Center Court Arena",
+    "note": "Battle of Ontario preseason tilt."
+  },
+  {
+    "id": "g9",
+    "team": "Maple Leafs",
+    "league": "NHL",
+    "opponent": "Montreal Canadiens",
+    "date": "2026-10-14",
+    "time": "19:00",
+    "venue": "Center Court Arena",
+    "note": "Original Six matchup; premium demand."
+  }
+]

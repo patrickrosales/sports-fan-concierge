@@ -1,0 +1,116 @@
+{
+  "Center Court Arena": {
+    "type": "indoor arena",
+    "neighbourhood": "South Core / Waterfront",
+    "capacity": 19800,
+    "seating": [
+      {
+        "tier": "Lower Bowl Center",
+        "price_range": "$180-$450",
+        "vibe": "Best sightlines, closest to the action.",
+        "best_for": "A special night or first-timers who want the full experience."
+      },
+      {
+        "tier": "Lower Bowl Corner",
+        "price_range": "$110-$220",
+        "vibe": "Great view, better value than center.",
+        "best_for": "The sweet spot of price and proximity."
+      },
+      {
+        "tier": "Upper Bowl",
+        "price_range": "$45-$95",
+        "vibe": "Full-arena view, lively crowd.",
+        "best_for": "Budget-friendly outings and big groups."
+      },
+      {
+        "tier": "Premium Club",
+        "price_range": "$400+",
+        "vibe": "In-seat service, club lounge access.",
+        "best_for": "Treating clients or a milestone celebration."
+      }
+    ],
+    "food": [
+      "Local craft beer taps on the main concourse",
+      "Smash burgers and loaded fries near section 108",
+      "Wood-fired pizza on the upper concourse",
+      "Vegan bowls and salads at the health kiosk"
+    ],
+    "amenities": ["Team store", "Accessible seating throughout", "Mobile ordering to your seat"]
+  },
+  "Downtown Dome": {
+    "type": "retractable-roof stadium",
+    "neighbourhood": "South Core / Waterfront",
+    "capacity": 49300,
+    "seating": [
+      {
+        "tier": "Field Level Baseline",
+        "price_range": "$90-$260",
+        "vibe": "Close to the field, catch a foul ball.",
+        "best_for": "Fans who want to feel in the game."
+      },
+      {
+        "tier": "100 Level Outfield",
+        "price_range": "$40-$110",
+        "vibe": "Home-run territory, sunny in day games.",
+        "best_for": "Families and a relaxed vibe."
+      },
+      {
+        "tier": "500 Level",
+        "price_range": "$18-$45",
+        "vibe": "Cheap seats, panoramic city + field view.",
+        "best_for": "Best value in the building."
+      },
+      {
+        "tier": "Premium Club Behind Home",
+        "price_range": "$220+",
+        "vibe": "All-inclusive food, padded seats.",
+        "best_for": "A splurge night out."
+      }
+    ],
+    "food": [
+      "Foot-long hot dogs and peanuts (classic)",
+      "Montreal-style smoked meat sandwiches",
+      "Poutine bar on the 100 level",
+      "Local ice cream and churros for dessert"
+    ],
+    "amenities": ["Retractable roof (open in fair weather)", "Kids' zone", "Team store"]
+  },
+  "Waterfront Pitch": {
+    "type": "open-air stadium",
+    "neighbourhood": "Exhibition / Lakeshore",
+    "capacity": 30000,
+    "seating": [
+      {
+        "tier": "Supporters' Section",
+        "price_range": "$35-$60",
+        "vibe": "Loud, standing, chants all match.",
+        "best_for": "Die-hards who want atmosphere."
+      },
+      {
+        "tier": "Sideline Midfield",
+        "price_range": "$70-$150",
+        "vibe": "Prime view across the whole pitch.",
+        "best_for": "The classic best-seat-in-the-house."
+      },
+      {
+        "tier": "End Zone / Goal Line",
+        "price_range": "$30-$55",
+        "vibe": "Behind the net/end zone, budget-friendly.",
+        "best_for": "Value seats with real energy."
+      },
+      {
+        "tier": "Premium Sideline Club",
+        "price_range": "$180+",
+        "vibe": "Covered, cushioned, lounge access.",
+        "best_for": "Comfort on a cooler evening."
+      }
+    ],
+    "food": [
+      "Craft beer garden behind the south stand",
+      "Birria tacos and street corn",
+      "Halal grill and shawarma wraps",
+      "Local cider and soft pretzels"
+    ],
+    "amenities": ["Open-air (dress for weather)", "Supporters' tailgate area", "Family zone"]
+  }
+}
