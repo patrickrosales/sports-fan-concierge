@@ -1,0 +1,4 @@
+pydantic-ai>=2.9,<3
+fastapi>=0.139,<1
+uvicorn[standard]>=0.34
+python-dotenv>=1.0
