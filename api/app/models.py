@@ -68,11 +68,21 @@ class LocalResult(BaseModel):
 class GameNightPlan(BaseModel):
     """The composed, fan-facing game-night plan the coordinator returns."""
 
-    game: GamePick = Field(description="The chosen game for the plan.")
-    seating: list[SeatingOption] = Field(description="Suggested seating options.")
-    dining: list[LocalTip] = Field(description="Where to eat nearby.")
-    getting_there: list[LocalTip] = Field(description="How to get there without driving.")
-    summary: str = Field(description="A warm, 2-3 sentence wrap-up of the night for the fan.")
+    game: GamePick | None = Field(
+        default=None,
+        description="The chosen game for the plan, or null if no matching game was found.",
+    )
+    seating: list[SeatingOption] = Field(default_factory=list, description="Suggested seating options.")
+    dining: list[LocalTip] = Field(default_factory=list, description="Where to eat nearby.")
+    getting_there: list[LocalTip] = Field(
+        default_factory=list, description="How to get there without driving."
+    )
+    summary: str = Field(
+        description=(
+            "A warm, 2-3 sentence wrap-up of the night for the fan. "
+            "If no game was found, a friendly explanation of why and what teams/data are available instead."
+        )
+    )
 
 
 # ---------------------------------------------------------------------------

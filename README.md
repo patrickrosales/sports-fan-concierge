@@ -1,4 +1,4 @@
-# Toronto Sports Fan Concierge
+# Sports Fan Concierge
 
 A multi-agent demo: tell it what kind of game night you're after, and a coordinator agent
 delegates to three specialists — a **Schedule Agent**, a **Venue Agent**, and a **Local

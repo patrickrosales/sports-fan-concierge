@@ -22,7 +22,7 @@ export interface LocalTip {
 }
 
 export interface GameNightPlan {
-  game: GamePick
+  game: GamePick | null
   seating: SeatingOption[]
   dining: LocalTip[]
   getting_there: LocalTip[]
