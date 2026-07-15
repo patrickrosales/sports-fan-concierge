@@ -19,10 +19,13 @@ export interface LocalTip {
   name: string
   category: string
   detail: string
+  url: string | null
 }
 
 export interface GameNightPlan {
   game: GamePick | null
+  venue_url: string | null
+  ticket_url: string | null
   seating: SeatingOption[]
   dining: LocalTip[]
   getting_there: LocalTip[]

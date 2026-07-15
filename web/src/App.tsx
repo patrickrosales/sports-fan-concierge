@@ -70,6 +70,8 @@ function App() {
               const game = event.data.games[0] ?? null
               setPartialPlan((prev) => ({
                 game,
+                venue_url: prev?.venue_url ?? null,
+                ticket_url: prev?.ticket_url ?? null,
                 seating: prev?.seating ?? [],
                 dining: prev?.dining ?? [],
                 getting_there: prev?.getting_there ?? [],
@@ -80,14 +82,30 @@ function App() {
               setPartialPlan((prev) =>
                 prev
                   ? { ...prev, seating }
-                  : { game: null, seating, dining: [], getting_there: [], summary: '' },
+                  : {
+                      game: null,
+                      venue_url: null,
+                      ticket_url: null,
+                      seating,
+                      dining: [],
+                      getting_there: [],
+                      summary: '',
+                    },
               )
             } else if (event.agent === 'local_experience' && 'dining' in event.data) {
               const { dining, getting_there } = event.data
               setPartialPlan((prev) =>
                 prev
                   ? { ...prev, dining, getting_there }
-                  : { game: null, seating: [], dining, getting_there, summary: '' },
+                  : {
+                      game: null,
+                      venue_url: null,
+                      ticket_url: null,
+                      seating: [],
+                      dining,
+                      getting_there,
+                      summary: '',
+                    },
               )
             }
           }

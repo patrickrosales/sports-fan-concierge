@@ -53,6 +53,10 @@ class LocalTip(BaseModel):
     name: str = Field(description="Place or option name.")
     category: str = Field(description="e.g. 'restaurant', 'transit', 'pre-game'.")
     detail: str = Field(description="One-line why/what, kept concrete.")
+    url: str | None = Field(
+        default=None,
+        description="Not set by the model -- filled in by the backend after the agent returns.",
+    )
 
 
 class LocalResult(BaseModel):
@@ -71,6 +75,14 @@ class GameNightPlan(BaseModel):
     game: GamePick | None = Field(
         default=None,
         description="The chosen game for the plan, or null if no matching game was found.",
+    )
+    venue_url: str | None = Field(
+        default=None,
+        description="Not set by the model -- filled in by the backend after the plan is assembled.",
+    )
+    ticket_url: str | None = Field(
+        default=None,
+        description="Not set by the model -- filled in by the backend after the plan is assembled.",
     )
     seating: list[SeatingOption] = Field(default_factory=list, description="Suggested seating options.")
     dining: list[LocalTip] = Field(default_factory=list, description="Where to eat nearby.")

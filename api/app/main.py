@@ -43,7 +43,8 @@ from pydantic_ai.messages import (
 
 from .coordinator import coordinator
 from .data import load_deps
-from .models import LocalResult, ScheduleResult, VenueResult
+from .links import maps_search_url, ticket_search_url
+from .models import ComparisonResult, GameNightPlan, LocalResult, ScheduleResult, VenueResult
 from .settings import has_api_key
 
 # The three delegation tools = the specialists the AgentTrace UI renders.
@@ -82,6 +83,19 @@ def _call_detail(event: FunctionToolCallEvent) -> str | None:
     if not detail:
         return None
     return detail if len(detail) <= 60 else f"{detail[:57]}..."
+
+
+def _add_links(plan: GameNightPlan) -> GameNightPlan:
+    """Fill in venue/ticket/dining links via deterministic templates (see links.py).
+
+    Never LLM-generated -- computed here, after the coordinator's output is final, from
+    name strings the specialists already returned.
+    """
+    if plan.game:
+        plan.venue_url = maps_search_url(plan.game.venue)
+        plan.ticket_url = ticket_search_url(plan.game.team)
+    plan.dining = [tip.model_copy(update={"url": maps_search_url(tip.name)}) for tip in plan.dining]
+    return plan
 
 
 def _result_summary(content: object) -> str:
@@ -149,6 +163,11 @@ async def plan(req: PlanRequest) -> StreamingResponse:
                         )
                     elif isinstance(event, AgentRunResultEvent):
                         plan_model = event.result.output
+                        if isinstance(plan_model, GameNightPlan):
+                            plan_model = _add_links(plan_model)
+                        elif isinstance(plan_model, ComparisonResult):
+                            for option in plan_model.options:
+                                _add_links(option.plan)
                         yield _sse({"type": "done", "plan": plan_model.model_dump()})
         except Exception as exc:  # surface anything (rate limit, refusal, network) cleanly
             yield _sse({"type": "error", "message": f"{type(exc).__name__}: {exc}"})

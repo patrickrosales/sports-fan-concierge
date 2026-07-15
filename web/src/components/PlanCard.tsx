@@ -15,8 +15,10 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   )
 }
 
+const LINK_CLASS = 'text-accent-400 underline-offset-2 hover:text-accent-300 hover:underline'
+
 export function PlanCard({ plan, bare = false }: Props) {
-  const { game, seating, dining, getting_there, summary } = plan
+  const { game, venue_url, ticket_url, seating, dining, getting_there, summary } = plan
   const wrapper = bare ? 'w-full' : 'w-full max-w-2xl mx-auto'
 
   if (!game) {
@@ -36,11 +38,30 @@ export function PlanCard({ plan, bare = false }: Props) {
         <p className="text-xs font-medium uppercase tracking-wide text-accent-400">
           {game.league}
         </p>
-        <h2 className="mt-1 text-lg font-semibold text-linear-text">
-          {game.team} vs {game.opponent}
-        </h2>
+        <div className="mt-1 flex items-start justify-between gap-3">
+          <h2 className="text-lg font-semibold text-linear-text">
+            {game.team} vs {game.opponent}
+          </h2>
+          {ticket_url && (
+            <a
+              href={ticket_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`shrink-0 rounded-md border border-linear-border px-2.5 py-1 text-xs font-medium ${LINK_CLASS}`}
+            >
+              Get tickets
+            </a>
+          )}
+        </div>
         <p className="mt-1 text-sm text-linear-text-tertiary">
-          {game.date} · {game.time} · {game.venue}
+          {game.date} · {game.time} ·{' '}
+          {venue_url ? (
+            <a href={venue_url} target="_blank" rel="noopener noreferrer" className={LINK_CLASS}>
+              {game.venue}
+            </a>
+          ) : (
+            game.venue
+          )}
         </p>
         <p className="mt-2 text-sm text-linear-text-secondary">{game.why}</p>
       </div>
@@ -68,7 +89,13 @@ export function PlanCard({ plan, bare = false }: Props) {
           <ul className="space-y-1.5 text-sm">
             {dining.map((d) => (
               <li key={d.name}>
-                <span className="font-medium text-linear-text">{d.name}</span>
+                {d.url ? (
+                  <a href={d.url} target="_blank" rel="noopener noreferrer" className={`font-medium ${LINK_CLASS}`}>
+                    {d.name}
+                  </a>
+                ) : (
+                  <span className="font-medium text-linear-text">{d.name}</span>
+                )}
                 <span className="text-linear-text-tertiary"> — {d.detail}</span>
               </li>
             ))}
