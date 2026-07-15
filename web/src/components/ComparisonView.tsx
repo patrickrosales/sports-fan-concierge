@@ -1,4 +1,5 @@
 import { PlanCard } from './PlanCard'
+import { renderBold } from '../lib/markdown'
 import type { ComparisonResult } from '../lib/stream'
 
 interface Props {
@@ -27,7 +28,9 @@ export function ComparisonView({ comparison }: Props) {
         <p className="text-xs font-medium uppercase tracking-wide text-indigo-500">
           Concierge recommendation
         </p>
-        <p className="mt-1 text-sm text-indigo-900 dark:text-indigo-200">{recommendation}</p>
+        <p className="mt-1 text-sm text-indigo-900 dark:text-indigo-200">
+          {renderBold(recommendation)}
+        </p>
       </div>
     </div>
   )

@@ -1,4 +1,5 @@
 import type { GameNightPlan } from '../lib/stream'
+import { renderBold } from '../lib/markdown'
 
 interface Props {
   plan: GameNightPlan
@@ -26,7 +27,7 @@ export function PlanCard({ plan, bare = false }: Props) {
         <p className="text-xs font-medium uppercase tracking-wide text-neutral-400">
           No matching game
         </p>
-        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{summary}</p>
+        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{renderBold(summary)}</p>
       </div>
     )
   }
@@ -102,7 +103,7 @@ export function PlanCard({ plan, bare = false }: Props) {
       )}
 
       <p className="mt-4 border-t border-neutral-100 dark:border-neutral-800 pt-4 text-sm text-neutral-600 dark:text-neutral-300">
-        {summary}
+        {renderBold(summary)}
       </p>
     </div>
   )

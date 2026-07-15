@@ -33,19 +33,51 @@ UI). The app is the demo; the build is the story about how you use AI coding too
 ## Architecture
 
 ```
-web/ (Vite + React + TS + Tailwind)              api/ (FastAPI + Pydantic AI + Claude)
-┌──────────────────────────────┐                 ┌───────────────────────────────────────────┐
-│ RequestBar  (fan's ask)       │  POST /api/plan  │ /plan  (SSE)                              │
-│ AgentTrace  (live steps)      │ ◀──SSE events──  │  coordinator = Agent(instructions, deps)  │
-│   ▸ Schedule Agent  ✓          │                 │   @coordinator.tool find_games(...)  ──┐   │
-│   ▸ Venue Agent     ✓          │                 │   @coordinator.tool venue_options(...) │   │
-│   ▸ Local Agent     …          │                 │   @coordinator.tool local_tips(...)    │   │
-│ PlanCard    (final plan)       │                 │        each calls a sub-Agent.run(     │   │
-└──────────────────────────────┘                 │            ..., usage=ctx.usage)  ◀─────┘   │
-                                                  │  run_stream_events() → SSE → browser       │
-                                                  └───────────────────────────────────────────┘
-                                    seed: data/games.json, venues.json   live: web_search (local agent)
+web/ (Vite + React + TS + Tailwind)
+┌────────────────────────────────────────────────────────────────────────┐
+│  RequestBar (the ask)                                                  │
+│  AgentTrace (live steps, keyed by call_id)                             │
+│  PlanCard / ComparisonView (final result)                              │
+└────────────────────────────────────────────────────────────────────────┘
+     │  POST /api/plan (query)                        ▲
+     ▼                                                │  SSE events
+api/ (FastAPI + Pydantic AI + Claude)
+┌────────────────────────────────────────────────────────────────────────┐
+│  POST /api/plan (SSE)                                                  │
+│         │                                                              │
+│         ▼                                                              │
+│  coordinator = Agent(                                                  │
+│      instructions, deps,                                               │
+│      output_type=[GameNightPlan, ComparisonResult],                    │
+│  )                                                                     │
+│         │                                                              │
+│         │  @coordinator.tool  (only the tools the request needs)       │
+│         ├──────────────────┬───────────────────────┬─────────────────┐ │
+│         ▼                  ▼                       ▼                 │ │
+│    find_games()    recommend_seating()    local_experience()         │ │
+│         │                  │                       │                 │ │
+│         ▼                  ▼                       ▼                 │ │
+│  ┌─────────────┐    ┌─────────────┐     ┌────────────────────────┐   │ │
+│  │  Schedule   │    │   Venue     │     │  Local Experience      │   │ │
+│  │  Agent      │    │   Agent     │     │  Agent                 │   │ │
+│  └──────┬──────┘    └──────┬──────┘     └───────────┬────────────┘   │ │
+│         │                  │                        │                │ │
+│         ▼                  ▼                        ▼                │ │
+│  ┌─────────────────────────────────┐       ┌───────────────────────┐ │ │
+│  │ data/games.json, venues.json    │       │ Claude web_search     │ │ │
+│  │ (seed, deterministic)           │       │ (live)                │ │ │
+│  └─────────────────────────────────┘       └───────────────────────┘ │ │
+└──────────────────────────────────────────────────────────────────────┘─┘
 ```
+
+The coordinator calls its three delegation tools based on what the request actually needs -- not a fixed
+pipeline. Each call surfaces as its own `agent_start` → `agent_result` pair over SSE (via
+`run_stream_events()`), correlated by a unique `call_id`, followed by a final `done` event carrying the
+`GameNightPlan` or `ComparisonResult`.
+
+For a **compare** request ("Raptors or Leafs this weekend?"), the coordinator calls `find_games` (and
+often `recommend_seating`/`local_experience`) once per option -- sometimes concurrently -- and returns a
+`ComparisonResult` instead of a single `GameNightPlan`. See "Enhancement: Compare Mode" below.
 
 ## Pydantic AI specifics (verified against current docs; note churn)
 - **Agents:** `Agent('anthropic:claude-sonnet-4-6', instructions=..., deps_type=..., output_type=...)`.
