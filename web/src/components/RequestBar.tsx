@@ -28,7 +28,7 @@ export function RequestBar({ onSubmit, disabled }: Props) {
           e.preventDefault()
           submit(value)
         }}
-        className="flex items-center gap-2 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 px-4 py-3 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500/40"
+        className="flex items-center gap-2 rounded-lg border border-linear-border bg-linear-surface/60 px-4 py-3 shadow-sm backdrop-blur-sm focus-within:ring-2 focus-within:ring-accent-500/40 focus-within:border-accent-700"
       >
         <input
           type="text"
@@ -36,12 +36,12 @@ export function RequestBar({ onSubmit, disabled }: Props) {
           onChange={(e) => setValue(e.target.value)}
           placeholder="I want to catch a game next week…"
           disabled={disabled}
-          className="flex-1 bg-transparent outline-none text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400"
+          className="flex-1 bg-transparent outline-none text-sm text-linear-text placeholder:text-linear-text-quaternary"
         />
         <button
           type="submit"
           disabled={disabled || !value.trim()}
-          className="shrink-0 rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-indigo-500 disabled:cursor-not-allowed disabled:bg-neutral-300 dark:disabled:bg-neutral-700"
+          className="shrink-0 rounded-md bg-accent-500 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-accent-400 disabled:cursor-not-allowed disabled:bg-linear-surface-hover disabled:text-linear-text-quaternary"
         >
           Plan my night
         </button>
@@ -57,7 +57,7 @@ export function RequestBar({ onSubmit, disabled }: Props) {
               setValue(example)
               submit(example)
             }}
-            className="rounded-full border border-neutral-200 dark:border-neutral-800 px-3 py-1 text-xs text-neutral-500 dark:text-neutral-400 transition-colors hover:border-indigo-400 hover:text-indigo-600 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-full border border-linear-border px-3 py-1 text-xs text-linear-text-tertiary transition-colors hover:border-accent-600 hover:text-accent-300 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {example}
           </button>

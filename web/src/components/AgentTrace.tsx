@@ -18,7 +18,7 @@ interface Props {
 
 function Spinner() {
   return (
-    <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-neutral-300 border-t-indigo-500 dark:border-neutral-700 dark:border-t-indigo-400" />
+    <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-linear-border-strong border-t-accent-500" />
   )
 }
 
@@ -38,8 +38,8 @@ export function AgentTrace({ steps }: Props) {
   if (steps.length === 0) return null
 
   return (
-    <div className="w-full max-w-2xl mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4">
-      <p className="mb-3 text-xs font-medium uppercase tracking-wide text-neutral-400">
+    <div className="w-full max-w-2xl mx-auto rounded-lg border border-linear-border bg-linear-surface/60 p-4 backdrop-blur-sm">
+      <p className="mb-3 text-xs font-medium uppercase tracking-wide text-linear-text-quaternary">
         Concierge team
       </p>
       <ul className="space-y-3">
@@ -49,16 +49,16 @@ export function AgentTrace({ steps }: Props) {
               {step.status === 'running' ? <Spinner /> : <Check />}
             </span>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+              <p className="text-sm font-medium text-linear-text">
                 {AGENT_LABELS[step.agent] ?? step.agent}
                 {step.detail && (
-                  <span className="ml-1.5 font-normal text-neutral-400">— {step.detail}</span>
+                  <span className="ml-1.5 font-normal text-linear-text-quaternary">
+                    — {step.detail}
+                  </span>
                 )}
               </p>
               {step.summary && (
-                <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">
-                  {step.summary}
-                </p>
+                <p className="mt-0.5 text-xs text-linear-text-tertiary">{step.summary}</p>
               )}
             </div>
           </li>

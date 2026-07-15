@@ -16,7 +16,7 @@ export function ComparisonView({ comparison }: Props) {
       >
         {options.map((option) => (
           <div key={option.label} className="space-y-2">
-            <p className="text-xs font-medium uppercase tracking-wide text-neutral-400 px-1">
+            <p className="text-xs font-medium uppercase tracking-wide text-linear-text-quaternary px-1">
               {option.label}
             </p>
             <PlanCard plan={option.plan} bare />
@@ -24,13 +24,11 @@ export function ComparisonView({ comparison }: Props) {
         ))}
       </div>
 
-      <div className="w-full max-w-2xl mx-auto rounded-lg border border-indigo-200 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950/40 px-4 py-3">
-        <p className="text-xs font-medium uppercase tracking-wide text-indigo-500">
+      <div className="w-full max-w-2xl mx-auto rounded-lg border border-accent-700/40 bg-accent-800/60 px-4 py-3">
+        <p className="text-xs font-medium uppercase tracking-wide text-accent-400">
           Concierge recommendation
         </p>
-        <p className="mt-1 text-sm text-indigo-900 dark:text-indigo-200">
-          {renderBold(recommendation)}
-        </p>
+        <p className="mt-1 text-sm text-linear-text-secondary">{renderBold(recommendation)}</p>
       </div>
     </div>
   )

@@ -1,7 +1,45 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /*
+   * Colors pulled directly from linear.app's own [data-theme="dark"] CSS custom
+   * properties (not approximated) -- e.g. --color-accent: #7170ff, --color-bg-primary:
+   * #08090a. Linear's *marketing* brand purple (#5e6ad2, their logo/--color-brand-bg)
+   * is a different, darker color from the accent their actual app UI uses for buttons,
+   * links, and focus rings -- easy to conflate, so named distinctly here.
+   */
+  --color-accent-50: #f1f1ff;
+  --color-accent-100: #e1e1ff;
+  --color-accent-200: #c4c4ff;
+  --color-accent-300: #a3a3ff;
+  --color-accent-400: #8989f0;
+  --color-accent-500: #7170ff;
+  --color-accent-600: #6a63f5;
+  --color-accent-700: #5750d6;
+  --color-accent-800: #18182f;
+  --color-accent-900: #131226;
+  --color-accent-950: #0d0c1a;
+
+  --color-linear-bg: #08090a;
+  --color-linear-panel: #0f1011;
+  --color-linear-surface: #1c1c1f;
+  --color-linear-surface-hover: #232326;
+  --color-linear-border: #23252a;
+  --color-linear-border-strong: #34343a;
+  --color-linear-text: #f7f8f8;
+  --color-linear-text-secondary: #d0d6e0;
+  --color-linear-text-tertiary: #8a8f98;
+  --color-linear-text-quaternary: #62666d;
+}
+
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-linear-bg);
 }
 
 html,

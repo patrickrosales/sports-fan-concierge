@@ -49,12 +49,10 @@ function App() {
   }
 
   return (
-    <div className="min-h-full bg-neutral-50 dark:bg-neutral-950 px-4 py-16">
+    <div className="min-h-full bg-transparent px-4 py-16">
       <header className="mx-auto mb-10 max-w-2xl text-center">
-        <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
-          Toronto Sports Fan Concierge
-        </h1>
-        <p className="mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+        <h1 className="text-2xl font-semibold text-linear-text">Toronto Sports Fan Concierge</h1>
+        <p className="mt-2 text-sm text-linear-text-tertiary">
           Tell us what you're after — a specialist team of agents plans your night.
         </p>
       </header>
@@ -65,7 +63,7 @@ function App() {
         <AgentTrace steps={steps} />
 
         {error && (
-          <div className="w-full max-w-2xl mx-auto rounded-lg border border-red-200 dark:border-red-900 bg-red-50 dark:bg-red-950/40 px-4 py-3 text-sm text-red-700 dark:text-red-300">
+          <div className="w-full max-w-2xl mx-auto rounded-lg border border-red-900/60 bg-red-950/30 px-4 py-3 text-sm text-red-300">
             {error}
           </div>
         )}

@@ -9,7 +9,7 @@ interface Props {
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-2 text-xs font-medium uppercase tracking-wide text-neutral-400">
+    <p className="mb-2 text-xs font-medium uppercase tracking-wide text-linear-text-quaternary">
       {children}
     </p>
   )
@@ -21,49 +21,41 @@ export function PlanCard({ plan, bare = false }: Props) {
 
   if (!game) {
     return (
-      <div
-        className={`${wrapper} rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6`}
-      >
-        <p className="text-xs font-medium uppercase tracking-wide text-neutral-400">
+      <div className={`${wrapper} rounded-lg border border-linear-border bg-linear-surface/60 p-6`}>
+        <p className="text-xs font-medium uppercase tracking-wide text-linear-text-quaternary">
           No matching game
         </p>
-        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{renderBold(summary)}</p>
+        <p className="mt-2 text-sm text-linear-text-secondary">{renderBold(summary)}</p>
       </div>
     )
   }
 
   return (
-    <div
-      className={`${wrapper} rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6`}
-    >
-      <div className="border-b border-neutral-100 dark:border-neutral-800 pb-4">
-        <p className="text-xs font-medium uppercase tracking-wide text-indigo-500">
+    <div className={`${wrapper} rounded-lg border border-linear-border bg-linear-surface/60 p-6`}>
+      <div className="border-b border-linear-border pb-4">
+        <p className="text-xs font-medium uppercase tracking-wide text-accent-400">
           {game.league}
         </p>
-        <h2 className="mt-1 text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+        <h2 className="mt-1 text-lg font-semibold text-linear-text">
           {game.team} vs {game.opponent}
         </h2>
-        <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+        <p className="mt-1 text-sm text-linear-text-tertiary">
           {game.date} · {game.time} · {game.venue}
         </p>
-        <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-300">{game.why}</p>
+        <p className="mt-2 text-sm text-linear-text-secondary">{game.why}</p>
       </div>
 
       {seating.length > 0 && (
-        <div className="border-b border-neutral-100 dark:border-neutral-800 py-4">
+        <div className="border-b border-linear-border py-4">
           <SectionLabel>Seating</SectionLabel>
           <div className="space-y-2">
             {seating.map((s) => (
               <div key={s.tier} className="flex items-baseline justify-between gap-4 text-sm">
                 <div className="min-w-0">
-                  <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                    {s.tier}
-                  </span>
-                  <span className="ml-2 text-neutral-500 dark:text-neutral-400">{s.vibe}</span>
+                  <span className="font-medium text-linear-text">{s.tier}</span>
+                  <span className="ml-2 text-linear-text-tertiary">{s.vibe}</span>
                 </div>
-                <span className="shrink-0 text-neutral-500 dark:text-neutral-400">
-                  {s.price_range}
-                </span>
+                <span className="shrink-0 text-linear-text-tertiary">{s.price_range}</span>
               </div>
             ))}
           </div>
@@ -71,15 +63,13 @@ export function PlanCard({ plan, bare = false }: Props) {
       )}
 
       {dining.length > 0 && (
-        <div className="border-b border-neutral-100 dark:border-neutral-800 py-4">
+        <div className="border-b border-linear-border py-4">
           <SectionLabel>Dining</SectionLabel>
           <ul className="space-y-1.5 text-sm">
             {dining.map((d) => (
               <li key={d.name}>
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {d.name}
-                </span>
-                <span className="text-neutral-500 dark:text-neutral-400"> — {d.detail}</span>
+                <span className="font-medium text-linear-text">{d.name}</span>
+                <span className="text-linear-text-tertiary"> — {d.detail}</span>
               </li>
             ))}
           </ul>
@@ -92,17 +82,15 @@ export function PlanCard({ plan, bare = false }: Props) {
           <ul className="space-y-1.5 text-sm">
             {getting_there.map((t) => (
               <li key={t.name}>
-                <span className="font-medium text-neutral-900 dark:text-neutral-100">
-                  {t.name}
-                </span>
-                <span className="text-neutral-500 dark:text-neutral-400"> — {t.detail}</span>
+                <span className="font-medium text-linear-text">{t.name}</span>
+                <span className="text-linear-text-tertiary"> — {t.detail}</span>
               </li>
             ))}
           </ul>
         </div>
       )}
 
-      <p className="mt-4 border-t border-neutral-100 dark:border-neutral-800 pt-4 text-sm text-neutral-600 dark:text-neutral-300">
+      <p className="mt-4 border-t border-linear-border pt-4 text-sm text-linear-text-secondary">
         {renderBold(summary)}
       </p>
     </div>
