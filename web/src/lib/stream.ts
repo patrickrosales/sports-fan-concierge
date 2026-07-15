@@ -45,9 +45,34 @@ export function isComparisonResult(result: PlanResult): result is ComparisonResu
   return 'options' in result
 }
 
+// Mirror the per-specialist Pydantic output models (api/app/models.py) -- these are
+// what the "data" field on an agent_result event carries, used to progressively
+// render a partial plan before the coordinator's final `done` event arrives.
+export interface ScheduleResult {
+  games: GamePick[]
+  note: string
+}
+
+export interface VenueResult {
+  venue: string
+  seating: SeatingOption[]
+  food_highlights: string[]
+}
+
+export interface LocalResult {
+  dining: LocalTip[]
+  getting_there: LocalTip[]
+}
+
 export type PlanEvent =
   | { type: 'agent_start'; agent: string; call_id: string; detail: string | null }
-  | { type: 'agent_result'; agent: string; call_id: string; summary: string }
+  | {
+      type: 'agent_result'
+      agent: string
+      call_id: string
+      summary: string
+      data: ScheduleResult | VenueResult | LocalResult | null
+    }
   | { type: 'done'; plan: PlanResult }
   | { type: 'error'; message: string }
 

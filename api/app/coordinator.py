@@ -14,6 +14,7 @@ from __future__ import annotations
 from pydantic_ai import Agent, RunContext
 
 from .agents import local_agent, schedule_agent, venue_agent
+from .cache import get_or_fetch
 from .models import (
     ComparisonResult,
     ConciergeDeps,
@@ -77,11 +78,21 @@ async def recommend_seating(
 async def local_experience(
     ctx: RunContext[ConciergeDeps], venue_name: str, neighbourhood: str
 ) -> LocalResult:
-    """Delegate to the Local Experience Agent (live web search) for dining + transit."""
-    prompt = (
-        f"Venue: {venue_name} in the {neighbourhood} area of Toronto. "
-        "Find nearby dining and public-transit tips for a game night here."
-    )
-    # local_agent has no deps_type, so we don't pass deps; we do share usage.
-    result = await local_agent.run(prompt, usage=ctx.usage)
-    return result.output
+    """Delegate to the Local Experience Agent (live web search) for dining + transit.
+
+    Cached by venue_name: the live web_search call is the slowest part of a run, and
+    the seed data only has 3 fixed venues, so repeat requests for the same venue (a
+    common case in compare-mode requests) reuse the cached result instead of
+    re-searching. See cache.py for why the key is venue_name alone.
+    """
+
+    async def fetch() -> LocalResult:
+        prompt = (
+            f"Venue: {venue_name} in the {neighbourhood} area of Toronto. "
+            "Find nearby dining and public-transit tips for a game night here."
+        )
+        # local_agent has no deps_type, so we don't pass deps; we do share usage.
+        result = await local_agent.run(prompt, usage=ctx.usage)
+        return result.output
+
+    return await get_or_fetch(venue_name, fetch)

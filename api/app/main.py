@@ -2,9 +2,16 @@
 
 Event protocol (each SSE ``data:`` line is a JSON object):
     {"type": "agent_start",  "agent": <tool name>, "call_id": <str>, "detail": <str|null>}
-    {"type": "agent_result", "agent": <tool name>, "call_id": <str>, "summary": <one-liner>}
+    {"type": "agent_result", "agent": <tool name>, "call_id": <str>, "summary": <one-liner>, "data": <typed sub-result JSON>}
     {"type": "done",         "plan": <GameNightPlan or ComparisonResult as JSON>}
     {"type": "error",        "message": <string>}
+
+``data`` on ``agent_result`` carries the sub-agent's full typed output (a ScheduleResult,
+VenueResult, or LocalResult, serialized). The frontend uses it to progressively render a
+partial plan as pieces arrive, rather than waiting for the final ``done`` event -- the
+``local_experience`` call alone can take 60s+, so showing the game/seating as soon as
+they're ready meaningfully improves perceived speed even though total latency is
+unchanged. ``summary`` remains the one-liner the AgentTrace UI shows regardless.
 
 Only the three delegation tools are surfaced -- internal machinery (e.g. the
 structured-output tool, sub-agent internals) never reaches the trace.
@@ -124,12 +131,20 @@ async def plan(req: PlanRequest) -> StreamingResponse:
                         and isinstance(event.part, ToolReturnPart)
                         and event.part.tool_name in DELEGATION_TOOLS
                     ):
+                        content = event.part.content
                         yield _sse(
                             {
                                 "type": "agent_result",
                                 "agent": event.part.tool_name,
                                 "call_id": event.part.tool_call_id,
-                                "summary": _result_summary(event.part.content),
+                                "summary": _result_summary(content),
+                                "data": (
+                                    content.model_dump()
+                                    if isinstance(
+                                        content, ScheduleResult | VenueResult | LocalResult
+                                    )
+                                    else None
+                                ),
                             }
                         )
                     elif isinstance(event, AgentRunResultEvent):

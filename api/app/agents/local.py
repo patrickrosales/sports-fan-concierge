@@ -17,7 +17,9 @@ local_agent = Agent(
     output_type=LocalResult,
     defer_model_check=True,
     # Live web search (Anthropic native tool) is attached via the capabilities API.
-    capabilities=[NativeTool(WebSearchTool(max_uses=3))],
+    # max_uses trimmed from 3 -> 2: this call dominates end-to-end latency (measured
+    # 60-160s+ this session), and 2 searches is enough for dining + transit tips.
+    capabilities=[NativeTool(WebSearchTool(max_uses=2))],
     instructions=(
         "You are the Local Experience Agent for a Toronto sports concierge. "
         "Given a venue and its neighbourhood, use web search to find a few good nearby "
