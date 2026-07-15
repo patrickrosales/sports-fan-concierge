@@ -6,7 +6,7 @@
     "opponent": "New York Yankees",
     "date": "2026-07-18",
     "time": "19:07",
-    "venue": "Downtown Dome",
+    "venue": "Rogers Centre",
     "note": "Weekend series opener; expect a big crowd."
   },
   {
@@ -16,7 +16,7 @@
     "opponent": "Boston Red Sox",
     "date": "2026-07-25",
     "time": "15:07",
-    "venue": "Downtown Dome",
+    "venue": "Rogers Centre",
     "note": "Afternoon game, roof likely open in summer."
   },
   {
@@ -26,7 +26,7 @@
     "opponent": "CF Montreal",
     "date": "2026-07-19",
     "time": "19:30",
-    "venue": "Waterfront Pitch",
+    "venue": "BMO Field",
     "note": "401 Derby rivalry match."
   },
   {
@@ -36,7 +36,7 @@
     "opponent": "New York City FC",
     "date": "2026-08-01",
     "time": "19:30",
-    "venue": "Waterfront Pitch",
+    "venue": "BMO Field",
     "note": "Saturday night under the lights."
   },
   {
@@ -46,7 +46,7 @@
     "opponent": "Hamilton Tiger-Cats",
     "date": "2026-07-24",
     "time": "19:00",
-    "venue": "Waterfront Pitch",
+    "venue": "BMO Field",
     "note": "Labour Day preview; classic rivalry."
   },
   {
@@ -56,7 +56,7 @@
     "opponent": "Boston Celtics",
     "date": "2026-10-08",
     "time": "19:30",
-    "venue": "Center Court Arena",
+    "venue": "Scotiabank Arena",
     "note": "Preseason opener; good for first-timers."
   },
   {
@@ -66,7 +66,7 @@
     "opponent": "Milwaukee Bucks",
     "date": "2026-10-28",
     "time": "19:30",
-    "venue": "Center Court Arena",
+    "venue": "Scotiabank Arena",
     "note": "Regular-season home opener."
   },
   {
@@ -76,7 +76,7 @@
     "opponent": "Ottawa Senators",
     "date": "2026-09-26",
     "time": "19:00",
-    "venue": "Center Court Arena",
+    "venue": "Scotiabank Arena",
     "note": "Battle of Ontario preseason tilt."
   },
   {
@@ -86,7 +86,67 @@
     "opponent": "Montreal Canadiens",
     "date": "2026-10-14",
     "time": "19:00",
-    "venue": "Center Court Arena",
+    "venue": "Scotiabank Arena",
     "note": "Original Six matchup; premium demand."
+  },
+  {
+    "id": "g10",
+    "team": "Marlies",
+    "league": "AHL",
+    "opponent": "Rochester Americans",
+    "date": "2026-10-17",
+    "time": "19:00",
+    "venue": "Coca-Cola Coliseum",
+    "note": "Regular-season home opener; a great low-cost intro to pro hockey."
+  },
+  {
+    "id": "g11",
+    "team": "Marlies",
+    "league": "AHL",
+    "opponent": "Utica Comets",
+    "date": "2026-11-01",
+    "time": "19:00",
+    "venue": "Coca-Cola Coliseum",
+    "note": "Sunday matinee; family-friendly crowd."
+  },
+  {
+    "id": "g12",
+    "team": "Raptors 905",
+    "league": "NBA G League",
+    "opponent": "Long Island Nets",
+    "date": "2026-11-08",
+    "time": "19:00",
+    "venue": "Mississauga Sports and Entertainment Centre",
+    "note": "Home opener; a close-up, budget-friendly look at rising NBA talent."
+  },
+  {
+    "id": "g13",
+    "team": "Raptors 905",
+    "league": "NBA G League",
+    "opponent": "Westchester Knicks",
+    "date": "2026-11-22",
+    "time": "19:00",
+    "venue": "Mississauga Sports and Entertainment Centre",
+    "note": "Saturday night game; easy free parking on-site."
+  },
+  {
+    "id": "g14",
+    "team": "Toronto Tempo",
+    "league": "WNBA",
+    "opponent": "Phoenix Mercury",
+    "date": "2026-08-14",
+    "time": "19:00",
+    "venue": "Coca-Cola Coliseum",
+    "note": "Canada's first WNBA franchise; expect a sellout, electric atmosphere."
+  },
+  {
+    "id": "g15",
+    "team": "Toronto Tempo",
+    "league": "WNBA",
+    "opponent": "New York Liberty",
+    "date": "2026-08-29",
+    "time": "19:00",
+    "venue": "Coca-Cola Coliseum",
+    "note": "Marquee matchup vs. the defending contenders."
   }
 ]

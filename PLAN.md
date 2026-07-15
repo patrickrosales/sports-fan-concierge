@@ -9,7 +9,8 @@ standout feature is a **live agent-trace UI** — you *watch* specialist agents 
 **What it is — "Toronto Sports Fan Concierge":** A fan types a natural request ("I want to catch a Raptors game
 next week, good seats, somewhere to eat nearby, and how to get there without driving"). A **coordinator agent**
 routes the request to specialist sub-agents that each assemble part of a personalized **game-night plan**:
-- **Schedule Agent** — upcoming games across Toronto's major teams (Raptors, Maple Leafs, Blue Jays, TFC, Argonauts)
+- **Schedule Agent** — upcoming games across 8 Toronto-area teams (Blue Jays, Maple Leafs, Raptors,
+  Toronto FC, Argonauts, Marlies, Raptors 905, Toronto Tempo)
 - **Venue Agent** — seating options + arena/stadium food & amenities
 - **Local Experience Agent** — nearby restaurants + transit/pre-game tips
 
@@ -202,3 +203,60 @@ moment isn't guaranteed on every phrasing — worth knowing before relying on it
 field), so trace rows are labeled with that raw request text (e.g. "Schedule Agent — Toronto Raptors home
 game this weekend") rather than a parsed team name — simpler, and matches what the coordinator actually
 sends in practice.
+
+## Enhancement: Speed
+
+**Problem:** live testing showed full runs regularly taking 60-160+ seconds, almost entirely inside the
+Local Experience Agent's `web_search` call. A full compare-mode run was directly timed at 161s -- too slow
+for a live demo. The coordinator's delegation calls already run concurrently where the model chooses to
+(confirmed live), so there was no free win from restructuring the coordinator itself.
+
+**Fixes shipped (`api/app/cache.py`, `api/app/coordinator.py`, `api/app/agents/local.py`,
+`api/app/main.py`, `web/src/App.tsx`):**
+- **Venue-keyed cache** for `local_experience` results. Keyed on `venue_name` alone, not the
+  LLM-generated `neighbourhood` argument (which isn't stable across calls for the same venue). A per-key
+  `asyncio.Lock` means concurrent calls to the same venue (common in compare-mode requests) share one
+  in-flight fetch instead of duplicating a live search. Measured: 96s cold → 31s warm single-plan run;
+  161s → 36s full compare-mode run.
+- **Progressive rendering**: `agent_result` SSE events now carry a `data` field with the sub-agent's full
+  typed output, so the frontend renders the game + seating as soon as they're ready instead of waiting for
+  the final `done` event. Guarded against compare-mode: if a second `find_games` `agent_start` is seen
+  (the compare-mode tell), partial rendering is suppressed for the rest of the run to avoid showing a
+  garbled single card mixing two options' data.
+- **Trimmed `web_search` `max_uses`** from 3 to 2. `search_context_size` was empirically tested at `low`
+  vs. the default `medium` and left at `medium` -- `low` measured *slower* in a direct A/B test, an
+  unintuitive but empirically-verified result worth remembering before "optimizing" it again.
+
+## Enhancement: Real Venues
+
+**What changed:** seed data (`api/data/games.json`, `api/data/venues.json`) now uses real, verified
+venue names instead of the earlier generic/fictional ones (Center Court Arena, Downtown Dome, Waterfront
+Pitch), and the team roster expanded from 5 to 8: Blue Jays, Maple Leafs, Raptors, Toronto FC, Argonauts,
+Marlies, Raptors 905, and Toronto Tempo.
+
+This is an intentional reversal of an earlier explicit instruction in this project to remove all
+MLSE-related references and keep venues generic -- confirmed with the user before implementing, since 7 of
+the 8 teams are MLSE-owned/operated properties. Opponents, dates, and times remain plausible fiction, not
+reconstructed real fixtures -- only the venue/team identities are real.
+
+**Verified venue mapping** (via live web search, not assumed from training data -- Toronto Tempo is a 2026
+WNBA expansion team and Raptors 905's venue was genuinely uncertain going in):
+
+| Team | League | Venue |
+|---|---|---|
+| Blue Jays | MLB | Rogers Centre |
+| Maple Leafs, Raptors | NHL, NBA | Scotiabank Arena |
+| Toronto FC, Argonauts | MLS, CFL | BMO Field |
+| Marlies, Toronto Tempo | AHL, WNBA | Coca-Cola Coliseum |
+| Raptors 905 | NBA G League | Mississauga Sports and Entertainment Centre |
+
+Real venues collapsed to 5 shared venues (down from 8 fictional 1:1 venues), which is a bonus for the
+venue-keyed cache from the Speed enhancement above -- a query for the Leafs now warms the cache for the
+Raptors too, since they share Scotiabank Arena.
+
+**The one non-obvious fix this required:** Mississauga Sports and Entertainment Centre is not in Toronto
+proper. The Local Experience Agent's prompt and instructions previously hardcoded "Toronto" and "TTC
+subway, streetcar, GO Transit" as the default transit context, which would have produced wrong transit
+advice for Raptors 905 games. Both `coordinator.py`'s `local_experience` prompt construction and
+`agents/local.py`'s instructions were made region-agnostic -- the venue's `neighbourhood` field (from
+`venues.json`) now carries the correct regional context instead of the prompt assuming Toronto/TTC.

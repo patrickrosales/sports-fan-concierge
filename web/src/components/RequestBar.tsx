@@ -3,7 +3,7 @@ import { useState } from 'react'
 const EXAMPLES = [
   'A Raptors night with good seats and dinner nearby',
   'Leafs game with transit tips from downtown',
-  'Cheapest Blue Jays tickets this month',
+  'Toronto Tempo game with dinner nearby',
   'Raptors or Leafs this weekend -- which is the better night out?',
 ]
 

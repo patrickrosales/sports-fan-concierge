@@ -1,7 +1,7 @@
 {
-  "Center Court Arena": {
+  "Scotiabank Arena": {
     "type": "indoor arena",
-    "neighbourhood": "South Core / Waterfront",
+    "neighbourhood": "Downtown / Bay Street",
     "capacity": 19800,
     "seating": [
       {
@@ -23,7 +23,7 @@
         "best_for": "Budget-friendly outings and big groups."
       },
       {
-        "tier": "Premium Club",
+        "tier": "Platinum Club",
         "price_range": "$400+",
         "vibe": "In-seat service, club lounge access.",
         "best_for": "Treating clients or a milestone celebration."
@@ -37,10 +37,10 @@
     ],
     "amenities": ["Team store", "Accessible seating throughout", "Mobile ordering to your seat"]
   },
-  "Downtown Dome": {
+  "Rogers Centre": {
     "type": "retractable-roof stadium",
-    "neighbourhood": "South Core / Waterfront",
-    "capacity": 49300,
+    "neighbourhood": "Downtown / South Core",
+    "capacity": 41500,
     "seating": [
       {
         "tier": "Field Level Baseline",
@@ -61,9 +61,9 @@
         "best_for": "Best value in the building."
       },
       {
-        "tier": "Premium Club Behind Home",
+        "tier": "Rogers Terrace",
         "price_range": "$220+",
-        "vibe": "All-inclusive food, padded seats.",
+        "vibe": "All-inclusive food, patio overlooking the field.",
         "best_for": "A splurge night out."
       }
     ],
@@ -71,13 +71,13 @@
       "Foot-long hot dogs and peanuts (classic)",
       "Montreal-style smoked meat sandwiches",
       "Poutine bar on the 100 level",
-      "Local ice cream and churros for dessert"
+      "Wood-fired pizza at the Rogers Terrace"
     ],
     "amenities": ["Retractable roof (open in fair weather)", "Kids' zone", "Team store"]
   },
-  "Waterfront Pitch": {
+  "BMO Field": {
     "type": "open-air stadium",
-    "neighbourhood": "Exhibition / Lakeshore",
+    "neighbourhood": "Exhibition Place",
     "capacity": 30000,
     "seating": [
       {
@@ -112,5 +112,67 @@
       "Local cider and soft pretzels"
     ],
     "amenities": ["Open-air (dress for weather)", "Supporters' tailgate area", "Family zone"]
+  },
+  "Coca-Cola Coliseum": {
+    "type": "indoor arena",
+    "neighbourhood": "Exhibition Place",
+    "capacity": 8500,
+    "seating": [
+      {
+        "tier": "Lower Bowl Center",
+        "price_range": "$50-$95",
+        "vibe": "Close, intimate, easy sightlines in a smaller building.",
+        "best_for": "The best value seats you'll find at this level of hockey/basketball."
+      },
+      {
+        "tier": "Lower Bowl Corner",
+        "price_range": "$35-$60",
+        "vibe": "Great angle, relaxed crowd.",
+        "best_for": "First-timers and families."
+      },
+      {
+        "tier": "Upper Bowl",
+        "price_range": "$20-$35",
+        "vibe": "Full-building view, budget-friendly.",
+        "best_for": "Casual fans and big groups."
+      }
+    ],
+    "food": [
+      "Classic arena concession stands (hot dogs, fries, nachos)",
+      "Local craft beer taps",
+      "Poutine and pretzels near the main concourse"
+    ],
+    "amenities": ["Team store", "Free-ish parking at Exhibition Place", "Compact, easy-to-navigate concourse"]
+  },
+  "Mississauga Sports and Entertainment Centre": {
+    "type": "indoor arena",
+    "neighbourhood": "Mississauga (Hurontario / Central Parkway)",
+    "capacity": 5500,
+    "seating": [
+      {
+        "tier": "Courtside",
+        "price_range": "$60-$120",
+        "vibe": "Right on top of the action in a small building.",
+        "best_for": "Fans who want to feel every play up close."
+      },
+      {
+        "tier": "Lower Bowl",
+        "price_range": "$30-$55",
+        "vibe": "Great value, close to the floor.",
+        "best_for": "First-timers and families."
+      },
+      {
+        "tier": "Upper Bowl",
+        "price_range": "$15-$25",
+        "vibe": "Budget-friendly, full-court view.",
+        "best_for": "Casual fans and groups."
+      }
+    ],
+    "food": [
+      "Arena concession classics (burgers, fries, nachos)",
+      "Local coffee and snack kiosk",
+      "Pizza by the slice near the main entrance"
+    ],
+    "amenities": ["Free on-site parking", "Compact, easy-to-navigate concourse", "Team store"]
   }
 }

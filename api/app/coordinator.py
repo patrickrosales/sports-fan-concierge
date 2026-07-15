@@ -88,7 +88,7 @@ async def local_experience(
 
     async def fetch() -> LocalResult:
         prompt = (
-            f"Venue: {venue_name} in the {neighbourhood} area of Toronto. "
+            f"Venue: {venue_name}, in the {neighbourhood} area. "
             "Find nearby dining and public-transit tips for a game night here."
         )
         # local_agent has no deps_type, so we don't pass deps; we do share usage.
