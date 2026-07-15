@@ -2,6 +2,8 @@ import type { GameNightPlan } from '../lib/stream'
 
 interface Props {
   plan: GameNightPlan
+  /** Set by ComparisonView so cards fill a grid cell instead of centering themselves. */
+  bare?: boolean
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
@@ -12,12 +14,15 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function PlanCard({ plan }: Props) {
+export function PlanCard({ plan, bare = false }: Props) {
   const { game, seating, dining, getting_there, summary } = plan
+  const wrapper = bare ? 'w-full' : 'w-full max-w-2xl mx-auto'
 
   if (!game) {
     return (
-      <div className="w-full max-w-2xl mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+      <div
+        className={`${wrapper} rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6`}
+      >
         <p className="text-xs font-medium uppercase tracking-wide text-neutral-400">
           No matching game
         </p>
@@ -27,7 +32,9 @@ export function PlanCard({ plan }: Props) {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6">
+    <div
+      className={`${wrapper} rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6`}
+    >
       <div className="border-b border-neutral-100 dark:border-neutral-800 pb-4">
         <p className="text-xs font-medium uppercase tracking-wide text-indigo-500">
           {game.league}

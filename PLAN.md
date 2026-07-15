@@ -124,3 +124,49 @@ web/ (Vite + React + TS + Tailwind)              api/ (FastAPI + Pydantic AI + C
 - Secret handling (Claude key server-side only, never in the browser).
 - How AI coding tools helped: scaffolding FastAPI/React boilerplate, the SSE event plumbing, and verifying
   fast-moving Pydantic AI APIs against live docs — while you owned the agent design and the domain modeling.
+
+## Enhancement: Compare Mode
+
+**What it does:** a request naming two or more options ("Raptors or Leafs this weekend — which is the
+better night out?") makes the coordinator plan *both* in full — schedule, seating, dining, transit — and
+return a side-by-side comparison with a recommendation, instead of forcing a single pick. Fully
+coordinator-driven (no separate "compare" endpoint or UI toggle): the same instructions that tell the
+coordinator when to call which specialists now also tell it when to fan out per-option.
+
+**Output shape:** the coordinator's `output_type` is `[GameNightPlan, ComparisonResult]` — a *list* of
+alternative output types (Pydantic AI's actual union syntax; a Python `X | Y` type annotation does not
+work here, confirmed by reading `pydantic_ai/output.py`'s `OutputSpec` definition and by constructing an
+`Agent` with a list `output_type` directly). Claude picks whichever shape fits the request; single-option
+requests are unaffected and still return a plain `GameNightPlan`.
+
+```python
+class PlanOption(BaseModel):
+    label: str          # e.g. "Raptors"
+    plan: GameNightPlan
+
+class ComparisonResult(BaseModel):
+    options: list[PlanOption]
+    recommendation: str
+```
+
+**The concurrency bug this surfaced (and why the fix was necessary, not defensive):** under Pydantic AI's
+default `end_strategy='graceful'`, function tools called in the same turn run **in parallel** via asyncio
+(confirmed by reading `pydantic_ai._agent_graph.process_tool_calls` directly). Live-tested against the
+running app: a compare prompt produced two concurrent `find_games` calls whose *results resolved out of
+order* (the second call's result arrived before the first's). The original SSE/trace design keyed
+everything by tool name alone (`agent_start`/`agent_result` payloads only carried `"agent": tool_name`;
+the frontend matched `s.agent === event.agent && s.status === 'running'`) — with concurrent calls to the
+same tool, a result could get attributed to the wrong trace row. The fix threads each call's unique
+`tool_call_id` through the SSE payload as `call_id`, and the frontend keys trace steps by `call_id` instead
+of by agent name, so concurrent calls to the same specialist never collide regardless of completion order.
+
+**Caveat — not deterministic:** the same compare-style request doesn't always produce concurrent calls.
+A slightly different phrasing of the identical request was observed to produce a single `find_games` call
+with both teams folded into one request string instead of two parallel calls. Both outcomes are handled
+correctly (the `call_id` keying works either way), but the "watch two specialist teams work at once" demo
+moment isn't guaranteed on every phrasing — worth knowing before relying on it live.
+
+**Trace labeling:** delegation tools take free-text args (`find_games(request: str)`, not a structured team
+field), so trace rows are labeled with that raw request text (e.g. "Schedule Agent — Toronto Raptors home
+game this weekend") rather than a parsed team name — simpler, and matches what the coordinator actually
+sends in practice.

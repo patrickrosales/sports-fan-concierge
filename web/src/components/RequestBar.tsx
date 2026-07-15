@@ -4,6 +4,7 @@ const EXAMPLES = [
   'A Raptors night with good seats and dinner nearby',
   'Leafs game with transit tips from downtown',
   'Cheapest Blue Jays tickets this month',
+  'Raptors or Leafs this weekend -- which is the better night out?',
 ]
 
 interface Props {

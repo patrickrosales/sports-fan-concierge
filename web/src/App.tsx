@@ -2,34 +2,41 @@ import { useState } from 'react'
 import { RequestBar } from './components/RequestBar'
 import { AgentTrace, type TraceStep } from './components/AgentTrace'
 import { PlanCard } from './components/PlanCard'
-import { streamPlan, type GameNightPlan } from './lib/stream'
+import { ComparisonView } from './components/ComparisonView'
+import { streamPlan, isComparisonResult, type PlanResult } from './lib/stream'
 
 function App() {
   const [steps, setSteps] = useState<TraceStep[]>([])
-  const [plan, setPlan] = useState<GameNightPlan | null>(null)
+  const [result, setResult] = useState<PlanResult | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
 
   async function handleSubmit(query: string) {
     setSteps([])
-    setPlan(null)
+    setResult(null)
     setError(null)
     setLoading(true)
 
     try {
       for await (const event of streamPlan(query)) {
         if (event.type === 'agent_start') {
-          setSteps((prev) => [...prev, { agent: event.agent, status: 'running' }])
+          setSteps((prev) => [
+            ...prev,
+            {
+              callId: event.call_id,
+              agent: event.agent,
+              detail: event.detail,
+              status: 'running',
+            },
+          ])
         } else if (event.type === 'agent_result') {
           setSteps((prev) =>
             prev.map((s) =>
-              s.agent === event.agent && s.status === 'running'
-                ? { ...s, status: 'done', summary: event.summary }
-                : s,
+              s.callId === event.call_id ? { ...s, status: 'done', summary: event.summary } : s,
             ),
           )
         } else if (event.type === 'done') {
-          setPlan(event.plan)
+          setResult(event.plan)
         } else if (event.type === 'error') {
           setError(event.message)
         }
@@ -63,7 +70,12 @@ function App() {
           </div>
         )}
 
-        {plan && <PlanCard plan={plan} />}
+        {result &&
+          (isComparisonResult(result) ? (
+            <ComparisonView comparison={result} />
+          ) : (
+            <PlanCard plan={result} />
+          ))}
       </main>
     </div>
   )

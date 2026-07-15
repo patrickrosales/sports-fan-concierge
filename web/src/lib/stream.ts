@@ -29,10 +29,26 @@ export interface GameNightPlan {
   summary: string
 }
 
+export interface PlanOption {
+  label: string
+  plan: GameNightPlan
+}
+
+export interface ComparisonResult {
+  options: PlanOption[]
+  recommendation: string
+}
+
+export type PlanResult = GameNightPlan | ComparisonResult
+
+export function isComparisonResult(result: PlanResult): result is ComparisonResult {
+  return 'options' in result
+}
+
 export type PlanEvent =
-  | { type: 'agent_start'; agent: string }
-  | { type: 'agent_result'; agent: string; summary: string }
-  | { type: 'done'; plan: GameNightPlan }
+  | { type: 'agent_start'; agent: string; call_id: string; detail: string | null }
+  | { type: 'agent_result'; agent: string; call_id: string; summary: string }
+  | { type: 'done'; plan: PlanResult }
   | { type: 'error'; message: string }
 
 /**

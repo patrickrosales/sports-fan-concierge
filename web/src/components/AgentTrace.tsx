@@ -5,7 +5,9 @@ const AGENT_LABELS: Record<string, string> = {
 }
 
 export interface TraceStep {
+  callId: string
   agent: string
+  detail: string | null
   status: 'running' | 'done'
   summary?: string
 }
@@ -41,14 +43,17 @@ export function AgentTrace({ steps }: Props) {
         Concierge team
       </p>
       <ul className="space-y-3">
-        {steps.map((step, i) => (
-          <li key={`${step.agent}-${i}`} className="flex items-start gap-3">
+        {steps.map((step) => (
+          <li key={step.callId} className="flex items-start gap-3">
             <span className="mt-0.5 flex h-3.5 w-3.5 items-center justify-center">
               {step.status === 'running' ? <Spinner /> : <Check />}
             </span>
             <div className="min-w-0">
               <p className="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                 {AGENT_LABELS[step.agent] ?? step.agent}
+                {step.detail && (
+                  <span className="ml-1.5 font-normal text-neutral-400">— {step.detail}</span>
+                )}
               </p>
               {step.summary && (
                 <p className="mt-0.5 text-xs text-neutral-500 dark:text-neutral-400">

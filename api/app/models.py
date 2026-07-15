@@ -85,6 +85,22 @@ class GameNightPlan(BaseModel):
     )
 
 
+class PlanOption(BaseModel):
+    """One option within a side-by-side comparison."""
+
+    label: str = Field(description="Short tag for this option, e.g. the team name.")
+    plan: GameNightPlan
+
+
+class ComparisonResult(BaseModel):
+    """Coordinator output when the fan asked to compare two or more options."""
+
+    options: list[PlanOption] = Field(description="The options being compared, one plan each.")
+    recommendation: str = Field(
+        description="The coordinator's take on which option is the better pick, and why."
+    )
+
+
 # ---------------------------------------------------------------------------
 # Dependencies injected into agent tools via RunContext
 # ---------------------------------------------------------------------------

@@ -14,13 +14,20 @@ from __future__ import annotations
 from pydantic_ai import Agent, RunContext
 
 from .agents import local_agent, schedule_agent, venue_agent
-from .models import ConciergeDeps, GameNightPlan, LocalResult, ScheduleResult, VenueResult
+from .models import (
+    ComparisonResult,
+    ConciergeDeps,
+    GameNightPlan,
+    LocalResult,
+    ScheduleResult,
+    VenueResult,
+)
 from .settings import MODEL
 
 coordinator = Agent(
     MODEL,
     deps_type=ConciergeDeps,
-    output_type=GameNightPlan,
+    output_type=[GameNightPlan, ComparisonResult],
     defer_model_check=True,
     instructions=(
         "You are the concierge coordinator for a Toronto sports fan. "
@@ -30,12 +37,21 @@ coordinator = Agent(
         "3. Call `local_experience` with the venue and neighbourhood for dining + transit.\n"
         "Only call the specialists you actually need for the request -- if the fan only "
         "asks about the schedule, you don't need seating or local tips. "
-        "Then compose everything into one warm, concrete game-night plan. "
-        "Base the plan strictly on what the specialists return; never invent games, "
+        "Base every plan strictly on what the specialists return; never invent games, "
         "prices, or venues. If `find_games` returns no matching games (e.g. the team "
         "isn't one we track, or nothing is scheduled), do NOT call the other specialists "
         "or invent a game -- set `game` to null and use `summary` to explain what happened "
-        "and which teams/data you do have."
+        "and which teams/data you do have.\n\n"
+        "COMPARISON REQUESTS: if the fan names two or more teams/games to choose between "
+        "(e.g. 'Raptors or Leafs this weekend', 'compare a Jays game vs a TFC game'), plan "
+        "each option in full -- call `find_games` once per option with a specific request "
+        "naming that option (e.g. 'Toronto Raptors home game this weekend'), then run "
+        "`recommend_seating`/`local_experience` for each option's game as needed. Return a "
+        "`ComparisonResult` with one `PlanOption` per option (a short `label` plus its "
+        "`GameNightPlan`) and a `recommendation` explaining which option you'd pick and why. "
+        "If an option has no matching game, still include it with `game: null` and a note in "
+        "its plan's `summary`, rather than dropping it. For a single-option request, return a "
+        "plain `GameNightPlan` as before."
     ),
 )
 

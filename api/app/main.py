@@ -1,13 +1,21 @@
 """FastAPI app: streams the coordinator's multi-agent run to the browser over SSE.
 
 Event protocol (each SSE ``data:`` line is a JSON object):
-    {"type": "agent_start",  "agent": <tool name>}
-    {"type": "agent_result", "agent": <tool name>, "summary": <one-liner>}
-    {"type": "done",         "plan": <GameNightPlan as JSON>}
+    {"type": "agent_start",  "agent": <tool name>, "call_id": <str>, "detail": <str|null>}
+    {"type": "agent_result", "agent": <tool name>, "call_id": <str>, "summary": <one-liner>}
+    {"type": "done",         "plan": <GameNightPlan or ComparisonResult as JSON>}
     {"type": "error",        "message": <string>}
 
 Only the three delegation tools are surfaced -- internal machinery (e.g. the
 structured-output tool, sub-agent internals) never reaches the trace.
+
+``call_id`` is the tool call's unique ``tool_call_id``. It's required for correctness,
+not just nicety: the coordinator can (and for compare-mode requests, does) call the same
+delegation tool multiple times concurrently in one turn -- e.g. two ``find_games`` calls
+running in parallel, one per team being compared. Their results can resolve out of order.
+Keying purely by tool name (as an earlier version of this endpoint did) would let a second
+call's result get attributed to the first call's still-running trace step. ``call_id``
+keeps each call's start/result pair distinct no matter the completion order.
 """
 
 from __future__ import annotations
@@ -54,6 +62,21 @@ def _sse(payload: dict) -> str:
     return f"data: {json.dumps(payload)}\n\n"
 
 
+def _call_detail(event: FunctionToolCallEvent) -> str | None:
+    """Short human-readable detail for a delegation call, e.g. which team/venue it's about.
+
+    Delegation tools take free-text args (``request``, ``venue_name``) rather than a
+    structured team field, so we surface that text directly instead of trying to parse
+    a team name out of it -- it's already specific in practice (e.g. the coordinator
+    calls ``find_games`` with "Toronto Raptors home game this weekend").
+    """
+    args = event.part.args_as_dict()
+    detail = args.get("request") or args.get("venue_name")
+    if not detail:
+        return None
+    return detail if len(detail) <= 60 else f"{detail[:57]}..."
+
+
 def _result_summary(content: object) -> str:
     """One-line summary of a specialist's output for the trace UI."""
     if isinstance(content, ScheduleResult):
@@ -88,7 +111,14 @@ async def plan(req: PlanRequest) -> StreamingResponse:
                         isinstance(event, FunctionToolCallEvent)
                         and event.part.tool_name in DELEGATION_TOOLS
                     ):
-                        yield _sse({"type": "agent_start", "agent": event.part.tool_name})
+                        yield _sse(
+                            {
+                                "type": "agent_start",
+                                "agent": event.part.tool_name,
+                                "call_id": event.part.tool_call_id,
+                                "detail": _call_detail(event),
+                            }
+                        )
                     elif (
                         isinstance(event, FunctionToolResultEvent)
                         and isinstance(event.part, ToolReturnPart)
@@ -98,6 +128,7 @@ async def plan(req: PlanRequest) -> StreamingResponse:
                             {
                                 "type": "agent_result",
                                 "agent": event.part.tool_name,
+                                "call_id": event.part.tool_call_id,
                                 "summary": _result_summary(event.part.content),
                             }
                         )
