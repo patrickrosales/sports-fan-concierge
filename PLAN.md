@@ -2,7 +2,7 @@
 
 ## Context
 
-**Goal:** Build a small, polished, creatively-impressive full-stack app for a technical interview, showcasing
+**Goal:** Build a small, polished, creatively-impressive full-stack app that showcases
 **multi-agent orchestration with Pydantic AI** and Claude, with a clean Linear-style React front-end whose
 standout feature is a **live agent-trace UI** — you *watch* specialist agents get called and hand back results.
 
@@ -21,66 +21,8 @@ hook: it feels like a concierge team collaborating, and the UI shows each agent 
 concrete; and it exercises real full-stack engineering (typed agents, tool-calling, streaming, a live event
 UI). The app is the demo; the build is the story about how you use AI coding tools + a modern agent framework.
 
-## Stack (decided with the user)
-- **Backend:** Python + **FastAPI** + **Pydantic AI** + Claude (`anthropic:claude-sonnet-4-6`).
-- **Frontend:** Vite + React + TS + Tailwind, Linear-style minimal UI. Two separate services.
-- **Data (hybrid, decided):** seed JSON for **schedule + venue** (reliable, offline, deterministic core);
-  **live `web_search`** (Claude built-in server tool) only inside the **Local Experience Agent** for
-  restaurants/transit. Best-of-both: the core always works in a live demo, with a touch of real-web flair.
-- **Orchestration (decided):** **coordinator via agent delegation** — each specialist is a sub-agent the
-  coordinator invokes from inside a `@coordinator.tool` function; Claude decides which specialists to call
-  based on the request. The resulting tool-call trace is exactly what the UI streams.
-
-## Architecture
-
-```
-web/ (Vite + React + TS + Tailwind)
-┌────────────────────────────────────────────────────────────────────────┐
-│  RequestBar (the ask)                                                  │
-│  AgentTrace (live steps, keyed by call_id)                             │
-│  PlanCard / ComparisonView (final result)                              │
-└────────────────────────────────────────────────────────────────────────┘
-     │  POST /api/plan (query)                        ▲
-     ▼                                                │  SSE events
-api/ (FastAPI + Pydantic AI + Claude)
-┌────────────────────────────────────────────────────────────────────────┐
-│  POST /api/plan (SSE)                                                  │
-│         │                                                              │
-│         ▼                                                              │
-│  coordinator = Agent(                                                  │
-│      instructions, deps,                                               │
-│      output_type=[GameNightPlan, ComparisonResult],                    │
-│  )                                                                     │
-│         │                                                              │
-│         │  @coordinator.tool  (only the tools the request needs)       │
-│         ├──────────────────┬───────────────────────┬─────────────────┐ │
-│         ▼                  ▼                       ▼                 │ │
-│    find_games()    recommend_seating()    local_experience()         │ │
-│         │                  │                       │                 │ │
-│         ▼                  ▼                       ▼                 │ │
-│  ┌─────────────┐    ┌─────────────┐     ┌────────────────────────┐   │ │
-│  │  Schedule   │    │   Venue     │     │  Local Experience      │   │ │
-│  │  Agent      │    │   Agent     │     │  Agent                 │   │ │
-│  └──────┬──────┘    └──────┬──────┘     └───────────┬────────────┘   │ │
-│         │                  │                        │                │ │
-│         ▼                  ▼                        ▼                │ │
-│  ┌─────────────────────────────────┐       ┌───────────────────────┐ │ │
-│  │ data/games.json, venues.json    │       │ Claude web_search     │ │ │
-│  │ (seed, deterministic)           │       │ (live)                │ │ │
-│  └─────────────────────────────────┘       └───────────────────────┘ │ │
-└──────────────────────────────────────────────────────────────────────┘─┘
-```
-
-The coordinator calls its three delegation tools based on what the request actually needs -- not a fixed
-pipeline. Each call surfaces as its own `agent_start` → `agent_result` pair over SSE (via
-`run_stream_events()`), correlated by a unique `call_id`, followed by a final `done` event carrying the
-`GameNightPlan` or `ComparisonResult`.
-
-For a **compare** request ("Raptors or Leafs this weekend?"), the coordinator calls `find_games` (and
-often `recommend_seating`/`local_experience`) once per option -- sometimes concurrently -- and returns a
-`ComparisonResult` instead of a single `GameNightPlan`. See "Enhancement: Compare Mode" below.
-
 ## Pydantic AI specifics (verified against current docs; note churn)
+
 - **Agents:** `Agent('anthropic:claude-sonnet-4-6', instructions=..., deps_type=..., output_type=...)`.
 - **Structured output:** each sub-agent returns a Pydantic `BaseModel` via `output_type=` (validated, with
   auto-retry on invalid output). Coordinator's final `output_type` = a `GameNightPlan` model.
@@ -98,6 +40,7 @@ often `recommend_seating`/`local_experience`) once per option -- sometimes concu
   live docs (or the installed package's source) before finalizing — do not hard-trust these snippets.
 
 ## Data contract
+
 - Request: `{ query: string }`
 - SSE events (to browser): `{type:'agent_start', agent}`, `{type:'agent_result', agent, summary}`,
   `{type:'done', plan: GameNightPlan}`, `{type:'error', message}`
@@ -105,6 +48,7 @@ often `recommend_seating`/`local_experience`) once per option -- sometimes concu
   getting_there: [...], summary: string }` — every list item typed.
 
 ## Build steps
+
 1. **Scaffold** `api/` (FastAPI + `pydantic-ai`, `uvicorn`, run via `uv` or venv) and `web/` (Vite React-TS +
    Tailwind). Root `README.md`; `.env.example` with `ANTHROPIC_API_KEY=`. Vite proxy `/api` → :8000.
 2. **Seed data:** `data/games.json` (a handful of upcoming games per team) + `data/venues.json`
@@ -123,6 +67,7 @@ often `recommend_seating`/`local_experience`) once per option -- sometimes concu
    from downtown", "weekend doubleheader") so the demo is instant and reliably shows multi-agent routing.
 
 ## Critical files
+
 - `api/app/main.py` — FastAPI app + `/api/plan` SSE route + event mapping
 - `api/app/coordinator.py` — coordinator Agent + the three delegation `@tool`s (the multi-agent core)
 - `api/app/agents/{schedule,venue,local}.py` — the three specialist sub-agents + their output models
@@ -134,6 +79,7 @@ often `recommend_seating`/`local_experience`) once per option -- sometimes concu
 - `README.md`, `.env.example`
 
 ## Verification (end-to-end, not just types)
+
 - **Run both:** `api` on :8000 (`uvicorn`), `web` on :5173; confirm the proxy works.
 - **Sub-agents in isolation:** each returns a valid typed output for a representative prompt before wiring
   the coordinator (catches schema/tool bugs early).
@@ -147,7 +93,8 @@ often `recommend_seating`/`local_experience`) once per option -- sometimes concu
   validation error.
 - **UI check:** run + screenshot; confirm the Linear-style look holds and the body never scrolls horizontally.
 
-## Interview talking points this build creates (keep notes as you go)
+## Talking points
+
 - Multi-agent orchestration via **agent delegation** and why the coordinator-routes pattern beats a fixed
   pipeline (the model decides which specialists are relevant).
 - **Typed, validated agent output** with Pydantic models + auto-retry — reliability of LLM output.

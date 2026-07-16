@@ -39,7 +39,7 @@ Two terminals, from the repo root:
 
 ```bash
 # Terminal 1 — API on :8000
-api/.venv/bin/uvicorn app.main:app --port 8000 --app-dir api --reload
+lsof -ti :8000 | xargs kill -9 2>/dev/null; api/.venv/bin/uvicorn app.main:app --port 8000 --app-dir api --reload
 
 # Terminal 2 — web app on :5173 (proxies /api -> :8000)
 cd web && npm run dev
@@ -55,6 +55,67 @@ api/.venv/bin/python api/test_run.py
 
 Runs the coordinator once directly and prints the composed plan, then again with the
 live specialist trace streamed to your terminal.
+
+## Stack
+
+- **Backend:** Python + **FastAPI** + **Pydantic AI** + Claude (`anthropic:claude-sonnet-4-6`).
+- **Frontend:** Vite + React + TS + Tailwind, Linear-style minimal UI. Two separate services.
+- **Data (hybrid, decided):** seed JSON for **schedule + venue** (reliable, offline, deterministic core);
+  **live `web_search`** (Claude built-in server tool) only inside the **Local Experience Agent** for
+  restaurants/transit. Best-of-both: the core always works in a live demo, with a touch of real-web flair.
+- **Orchestration (decided):** **coordinator via agent delegation** — each specialist is a sub-agent the
+  coordinator invokes from inside a `@coordinator.tool` function; Claude decides which specialists to call
+  based on the request. The resulting tool-call trace is exactly what the UI streams.
+
+## Architecture
+
+```
+web/ (Vite + React + TS + Tailwind)
+┌────────────────────────────────────────────────────────────────────────┐
+│  RequestBar (the ask)                                                  │
+│  AgentTrace (live steps, keyed by call_id)                             │
+│  PlanCard / ComparisonView (final result)                              │
+└────────────────────────────────────────────────────────────────────────┘
+     │  POST /api/plan (query)                        ▲
+     ▼                                                │  SSE events
+api/ (FastAPI + Pydantic AI + Claude)
+┌────────────────────────────────────────────────────────────────────────┐
+│  POST /api/plan (SSE)                                                  │
+│         │                                                              │
+│         ▼                                                              │
+│  coordinator = Agent(                                                  │
+│      instructions, deps,                                               │
+│      output_type=[GameNightPlan, ComparisonResult],                    │
+│  )                                                                     │
+│         │                                                              │
+│         │  @coordinator.tool  (only the tools the request needs)       │
+│         ├──────────────────┬───────────────────────┬─────────────────┐ │
+│         ▼                  ▼                       ▼                 │ │
+│    find_games()    recommend_seating()    local_experience()         │ │
+│         │                  │                       │                 │ │
+│         ▼                  ▼                       ▼                 │ │
+│  ┌─────────────┐    ┌─────────────┐     ┌────────────────────────┐   │ │
+│  │  Schedule   │    │   Venue     │     │  Local Experience      │   │ │
+│  │  Agent      │    │   Agent     │     │  Agent                 │   │ │
+│  └──────┬──────┘    └──────┬──────┘     └───────────┬────────────┘   │ │
+│         │                  │                        │                │ │
+│         ▼                  ▼                        ▼                │ │
+│  ┌─────────────────────────────────┐       ┌───────────────────────┐ │ │
+│  │ data/games.json, venues.json    │       │ Claude web_search     │ │ │
+│  │ (seed, deterministic)           │       │ (live)                │ │ │
+│  └─────────────────────────────────┘       └───────────────────────┘ │ │
+└──────────────────────────────────────────────────────────────────────┘─┘
+```
+
+The coordinator calls its three delegation tools based on what the request actually needs -- not a fixed
+pipeline. Each call surfaces as its own `agent_start` → `agent_result` pair over SSE (via
+`run_stream_events()`), correlated by a unique `call_id`, followed by a final `done` event carrying the
+`GameNightPlan` or `ComparisonResult`.
+
+For a **compare** request ("Raptors or Leafs this weekend?"), the coordinator calls `find_games` (and
+often `recommend_seating`/`local_experience`) once per option -- sometimes concurrently -- and returns a
+`ComparisonResult` instead of a single `GameNightPlan`. See "Enhancement: Compare Mode" below.
+
 
 ## How it works
 
