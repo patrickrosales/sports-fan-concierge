@@ -1,152 +1,152 @@
 [
   {
     "id": "g1",
-    "team": "Blue Jays",
-    "league": "MLB",
-    "opponent": "New York Yankees",
-    "date": "2026-07-18",
-    "time": "19:07",
-    "venue": "Rogers Centre",
-    "note": "Weekend series opener; expect a big crowd."
+    "team": "Toronto Tempo",
+    "league": "WNBA",
+    "opponent": "Minnesota Lynx",
+    "date": "2026-07-30",
+    "time": "20:00",
+    "venue": "Scotiabank Arena",
+    "note": "Canada's first WNBA franchise at Scotiabank Arena; big-stage inaugural-season night."
   },
   {
     "id": "g2",
     "team": "Blue Jays",
     "league": "MLB",
-    "opponent": "Boston Red Sox",
-    "date": "2026-07-25",
-    "time": "15:07",
+    "opponent": "St. Louis Cardinals",
+    "date": "2026-07-31",
+    "time": "19:07",
     "venue": "Rogers Centre",
-    "note": "Afternoon game, roof likely open in summer."
+    "note": "Friday-night series opener; summer roof likely open."
   },
   {
     "id": "g3",
-    "team": "Toronto FC",
-    "league": "MLS",
-    "opponent": "CF Montreal",
-    "date": "2026-07-19",
-    "time": "19:30",
-    "venue": "BMO Field",
-    "note": "401 Derby rivalry match."
+    "team": "Blue Jays",
+    "league": "MLB",
+    "opponent": "St. Louis Cardinals",
+    "date": "2026-08-01",
+    "time": "15:07",
+    "venue": "Rogers Centre",
+    "note": "Saturday afternoon game (Transformers Day); family-friendly crowd."
   },
   {
     "id": "g4",
-    "team": "Toronto FC",
-    "league": "MLS",
-    "opponent": "New York City FC",
-    "date": "2026-08-01",
+    "team": "Argonauts",
+    "league": "CFL",
+    "opponent": "Calgary Stampeders",
+    "date": "2026-08-06",
     "time": "19:30",
     "venue": "BMO Field",
-    "note": "Saturday night under the lights."
+    "note": "First home game back at a revamped BMO Field after the FIFA World Cup."
   },
   {
     "id": "g5",
-    "team": "Argonauts",
-    "league": "CFL",
-    "opponent": "Hamilton Tiger-Cats",
-    "date": "2026-07-24",
-    "time": "19:00",
+    "team": "Toronto FC",
+    "league": "MLS",
+    "opponent": "Charlotte FC",
+    "date": "2026-08-19",
+    "time": "19:30",
     "venue": "BMO Field",
-    "note": "Labour Day preview; classic rivalry."
+    "note": "Midweek match during the Canadian National Exhibition."
   },
   {
     "id": "g6",
+    "team": "Argonauts",
+    "league": "CFL",
+    "opponent": "Hamilton Tiger-Cats",
+    "date": "2026-08-22",
+    "time": "19:00",
+    "venue": "BMO Field",
+    "note": "Battle of Ontario; classic CFL rivalry."
+  },
+  {
+    "id": "g7",
+    "team": "Toronto FC",
+    "league": "MLS",
+    "opponent": "New York City FC",
+    "date": "2026-08-29",
+    "time": "19:30",
+    "venue": "BMO Field",
+    "note": "Saturday night under the lights during the CNE."
+  },
+  {
+    "id": "g8",
+    "team": "Argonauts",
+    "league": "CFL",
+    "opponent": "Ottawa Redblacks",
+    "date": "2026-09-12",
+    "time": "13:00",
+    "venue": "BMO Field",
+    "note": "Saturday afternoon CTV game."
+  },
+  {
+    "id": "g9",
+    "team": "Toronto Tempo",
+    "league": "WNBA",
+    "opponent": "Indiana Fever",
+    "date": "2026-09-18",
+    "time": "19:30",
+    "venue": "Coca-Cola Coliseum",
+    "note": "Marquee matchup at the Tempo's home barn; expect a loud sellout."
+  },
+  {
+    "id": "g10",
+    "team": "Argonauts",
+    "league": "CFL",
+    "opponent": "Edmonton Elks",
+    "date": "2026-09-19",
+    "time": "15:00",
+    "venue": "BMO Field",
+    "note": "Weekend afternoon kickoff by the lake."
+  },
+  {
+    "id": "g11",
+    "team": "Toronto Tempo",
+    "league": "WNBA",
+    "opponent": "New York Liberty",
+    "date": "2026-09-20",
+    "time": "15:00",
+    "venue": "Coca-Cola Coliseum",
+    "note": "Sunday matinee vs. the Liberty; great family game."
+  },
+  {
+    "id": "g12",
+    "team": "Maple Leafs",
+    "league": "NHL",
+    "opponent": "Montreal Canadiens",
+    "date": "2026-09-29",
+    "time": "19:00",
+    "venue": "Scotiabank Arena",
+    "note": "Season opener and Original Six rivalry; premium demand."
+  },
+  {
+    "id": "g13",
+    "team": "Argonauts",
+    "league": "CFL",
+    "opponent": "BC Lions",
+    "date": "2026-10-03",
+    "time": "15:00",
+    "venue": "BMO Field",
+    "note": "Saturday afternoon game as the CFL season heats up."
+  },
+  {
+    "id": "g14",
+    "team": "Argonauts",
+    "league": "CFL",
+    "opponent": "Montreal Alouettes",
+    "date": "2026-10-23",
+    "time": "19:00",
+    "venue": "BMO Field",
+    "note": "Friday Night Football; late-season playoff-race stakes."
+  },
+  {
+    "id": "g15",
     "team": "Raptors",
     "league": "NBA (preseason)",
     "opponent": "Boston Celtics",
     "date": "2026-10-08",
     "time": "19:30",
     "venue": "Scotiabank Arena",
-    "note": "Preseason opener; good for first-timers."
-  },
-  {
-    "id": "g7",
-    "team": "Raptors",
-    "league": "NBA",
-    "opponent": "Milwaukee Bucks",
-    "date": "2026-10-28",
-    "time": "19:30",
-    "venue": "Scotiabank Arena",
-    "note": "Regular-season home opener."
-  },
-  {
-    "id": "g8",
-    "team": "Maple Leafs",
-    "league": "NHL (preseason)",
-    "opponent": "Ottawa Senators",
-    "date": "2026-09-26",
-    "time": "19:00",
-    "venue": "Scotiabank Arena",
-    "note": "Battle of Ontario preseason tilt."
-  },
-  {
-    "id": "g9",
-    "team": "Maple Leafs",
-    "league": "NHL",
-    "opponent": "Montreal Canadiens",
-    "date": "2026-10-14",
-    "time": "19:00",
-    "venue": "Scotiabank Arena",
-    "note": "Original Six matchup; premium demand."
-  },
-  {
-    "id": "g10",
-    "team": "Marlies",
-    "league": "AHL",
-    "opponent": "Rochester Americans",
-    "date": "2026-10-17",
-    "time": "19:00",
-    "venue": "Coca-Cola Coliseum",
-    "note": "Regular-season home opener; a great low-cost intro to pro hockey."
-  },
-  {
-    "id": "g11",
-    "team": "Marlies",
-    "league": "AHL",
-    "opponent": "Utica Comets",
-    "date": "2026-11-01",
-    "time": "19:00",
-    "venue": "Coca-Cola Coliseum",
-    "note": "Sunday matinee; family-friendly crowd."
-  },
-  {
-    "id": "g12",
-    "team": "Raptors 905",
-    "league": "NBA G League",
-    "opponent": "Long Island Nets",
-    "date": "2026-11-08",
-    "time": "19:00",
-    "venue": "Mississauga Sports and Entertainment Centre",
-    "note": "Home opener; a close-up, budget-friendly look at rising NBA talent."
-  },
-  {
-    "id": "g13",
-    "team": "Raptors 905",
-    "league": "NBA G League",
-    "opponent": "Westchester Knicks",
-    "date": "2026-11-22",
-    "time": "19:00",
-    "venue": "Mississauga Sports and Entertainment Centre",
-    "note": "Saturday night game; easy free parking on-site."
-  },
-  {
-    "id": "g14",
-    "team": "Toronto Tempo",
-    "league": "WNBA",
-    "opponent": "Phoenix Mercury",
-    "date": "2026-08-14",
-    "time": "19:00",
-    "venue": "Coca-Cola Coliseum",
-    "note": "Canada's first WNBA franchise; expect a sellout, electric atmosphere."
-  },
-  {
-    "id": "g15",
-    "team": "Toronto Tempo",
-    "league": "WNBA",
-    "opponent": "New York Liberty",
-    "date": "2026-08-29",
-    "time": "19:00",
-    "venue": "Coca-Cola Coliseum",
-    "note": "Marquee matchup vs. the defending contenders."
+    "note": "Preseason tune-up; good, lower-cost intro for first-timers."
   }
 ]
