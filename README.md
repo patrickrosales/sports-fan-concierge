@@ -22,6 +22,7 @@ See [`PLAN.md`](./PLAN.md) for the full design and architecture writeup.
 # 1. Add your API key
 cp .env.example .env
 # edit .env and set ANTHROPIC_API_KEY=sk-ant-...
+# (optional) set LOGFIRE_TOKEN=... to trace agent runs — see "Observability" below
 
 # 2. Backend
 cd api
@@ -55,6 +56,29 @@ api/.venv/bin/python api/test_run.py
 
 Runs the coordinator once directly and prints the composed plan, then again with the
 live specialist trace streamed to your terminal.
+
+## Observability (agent traces)
+
+Two complementary views of what the agents are doing:
+
+- **Live, in the browser:** the **AgentTrace** panel streams each specialist's
+  start/finish over SSE as it runs — the always-on view, no setup required.
+- **Durable traces (optional):** the backend instruments Pydantic AI with
+  [**Logfire**](https://logfire.pydantic.dev). The coordinator run and all three
+  sub-agents (Schedule / Venue / Local Experience) show up as **nested spans**, each
+  with its prompts, tool calls, and token usage — so you can inspect a run after the
+  fact, not just watch it live.
+
+Logfire is **gated on a token** (`send_to_logfire="if-token-present"`): with no
+`LOGFIRE_TOKEN` set it's a clean no-op — the app runs exactly as before, no warnings,
+no network. To turn it on:
+
+1. Create a project and write token at https://logfire.pydantic.dev.
+2. Add `LOGFIRE_TOKEN=...` to your `.env`.
+3. Restart the API. Traces appear in your Logfire project.
+
+Instrumentation lives in `api/app/observability.py` (`configure_observability()`),
+called once at startup from `api/app/main.py`.
 
 ## Stack
 

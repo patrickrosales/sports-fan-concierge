@@ -45,10 +45,15 @@ from .coordinator import coordinator
 from .data import load_deps
 from .links import maps_search_url, ticket_search_url
 from .models import ComparisonResult, GameNightPlan, LocalResult, ScheduleResult, VenueResult
+from .observability import configure_observability
 from .settings import has_api_key
 
 # The three delegation tools = the specialists the AgentTrace UI renders.
 DELEGATION_TOOLS = {"find_games", "recommend_seating", "local_experience"}
+
+# Instrument pydantic-ai so the coordinator + sub-agent runs are traced to Logfire
+# (no-op without LOGFIRE_TOKEN). settings.py has already loaded .env at import time.
+configure_observability()
 
 app = FastAPI(title="Toronto Sports Fan Concierge")
 
